@@ -12,14 +12,14 @@ This assignment involves creating a web-based client application that consumes a
 
 ### Define fetchWrapper
 
-- [ ] **1.1**: Create a `fetchWrapper.js` file in the `scripts/` directory.
-- [ ] **1.2**: Define `fetchWrapper(uri, options)` with two parameters:
+- [x] **1.1**: Create a `fetchWrapper.js` file in the `scripts/` directory.
+- [x] **1.2**: Define `fetchWrapper(uri, options)` with two parameters:
   - **1.2.1**: `uri` (string) - The URI to send the request to.
   - **1.2.2**: `options` (object) - Request configurations (e.g., method, headers, body).
-- [ ] **1.3**: Implement error handling:
+- [x] **1.3**: Implement error handling:
   - **1.3.1**: Check response status (200-299). If outside this range, throw an error with the status and status text.
   - **1.3.2**: Catch network errors (e.g., unreachable URL) and throw an appropriate error message.
-- [ ] **1.4**: Ensure the wrapper returns a Promise that resolves to parsed JSON if the response type is `application/json`.
+- [x] **1.4**: Ensure the wrapper returns a Promise that resolves to parsed JSON if the response type is `application/json`.
 
 ---
 
@@ -29,20 +29,20 @@ This assignment involves creating a web-based client application that consumes a
 
 ### HTML UI for Create and Delete
 
-- [ ] **2.1**: Create an HTML form in `index.html` for creating resources:
+- [x] **2.1**: Create an HTML form in `index.html` for creating resources:
   - **2.1.1**: Include input fields for the required data.
   - **2.1.2**: Add a submit button to trigger a POST request.
-- [ ] **2.2**: Create an HTML form for deleting resources:
+- [x] **2.2**: Create an HTML form for deleting resources:
   - **2.2.1**: Include an input field for Resource ID.
   - **2.2.2**: Add a submit button to trigger a DELETE request.
 
 ### JavaScript Functions for Create and Delete
 
-- [ ] **2.3**: Implement `postResource()` in `scripts/create.js`:
+- [x] **2.3**: Implement `postResource()` in `scripts/create.js`:
   - **2.3.1**: Validate input data before making the request.
   - **2.3.2**: Use `fetchWrapper` to send a POST request in JSON format.
   - **2.3.3**: Display success/error messages using Bootstrap alerts.
-- [ ] **2.4**: Implement `deleteResource()` in `scripts/delete.js`:
+- [x] **2.4**: Implement `deleteResource()` in `scripts/delete.js`:
   - **2.4.1**: Validate the Resource ID.
   - **2.4.2**: Use `fetchWrapper` to send a DELETE request.
   - **2.4.3**: Display success/error messages using Bootstrap alerts.
