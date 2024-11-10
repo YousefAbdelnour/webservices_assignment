@@ -55,7 +55,7 @@ This assignment involves creating a web-based client application that consumes a
 
 ### HTML UI for Read Operations
 
-- [ ] **3.1**: Create forms in `index.html` for each read operation:
+- [x] **3.1**: Create forms in `index.html` for each read operation:
   - **3.1.1**: `/collection_resource_1` - Include three filter fields.
   - **3.1.2**: `/collection_resource_2` - Include three filter fields.
   - **3.1.3**: `/resource/{resource_id}/subresource` - Input field for Resource ID.
@@ -63,13 +63,13 @@ This assignment involves creating a web-based client application that consumes a
 
 ### JavaScript Functions for Read Operations
 
-- [ ] **3.2**: Create functions for each read operation:
+- [x] **3.2**: Create functions for each read operation:
   - **3.2.1**: `getCollection1()` - Fetch data using `fetchWrapper` and filter inputs.
   - **3.2.2**: `getCollection2()` - Fetch data using `fetchWrapper` and filter inputs.
   - **3.2.3**: `getSubresource()` - Fetch data using `fetchWrapper` and Resource ID input.
   - **3.2.4**: `getSportsData()` - Fetch data from TheSportsDB API using sport and country filters.
 - [ ] **3.3**: Parse and display the fetched JSON data in HTML (tables, lists, etc.).
-- [ ] **3.4**: Validate all input filters to ensure correct data is being requested.
+- [x] **3.4**: Validate all input filters to ensure correct data is being requested.
 
 ---
 

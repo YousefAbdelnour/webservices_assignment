@@ -11,6 +11,6 @@ async function postUpdate(update_object) {
     await fetchWrapper(uri, options);
     showAlert("Update Successfully Created!", "success");
   } catch (error) {
-    showAlert("Failure: " + error.message, "danger");
+    showAlert(error.message, "danger");
   }
 }

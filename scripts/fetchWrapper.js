@@ -12,6 +12,7 @@ async function fetchWrapper(uri, options = {}) {
       const data = await response.json();
       return data;
     } else {
+      console.log(response);
       throw new Error("Response is not in JSON format");
     }
   } catch (error) {

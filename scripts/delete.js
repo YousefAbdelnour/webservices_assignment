@@ -11,6 +11,6 @@ async function deleteUpdate(id) {
     await fetchWrapper(uri, options);
     showAlert("Update Successfully Deleted!", "success");
   } catch (error) {
-    showAlert("Failure: " + error.message, "danger");
+    showAlert(error.message, "danger");
   }
 }
