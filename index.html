@@ -14,21 +14,19 @@
         display: none;
       }
     </style>
-    <script src="scripts/fetchWrapper.js" type="text/javascript"></script>
-    <script src="scripts/create.js" type="text/javascript"></script>
-    <script src="scripts/delete.js" type="text/javascript"></script>
-    <script src="scripts/read.js" type="text/javascript"></script>
     <title>VideoGames api client</title>
+    <script src="scripts/requests.js" type="module"></script>
   </head>
   <body>
     <div class="container mt-5">
-      <h1>Update Management</h1>
+      <h1>MyClient</h1>
+      <hr class="bg-primary border-bottom opacity-50" />
 
       <div id="liveAlertPlaceholder" class="d-none"></div>
 
       <div class="mb-3">
         <label for="action" class="form-label">Choose Action</label>
-        <select class="form-select" id="action" onchange="toggleForm()">
+        <select class="form-select" id="action">
           <option value="default">Select Desired Operation</option>
           <option value="create">Create Update</option>
           <option value="delete">Delete Update</option>
@@ -242,236 +240,156 @@
         <button type="submit" class="btn btn-primary">Search</button>
       </form>
     </div>
-
-    <script>
-      function toggleForm() {
-        const action = document.getElementById("action").value;
-
-        const createForm = document.getElementById("create-form");
-        const deleteForm = document.getElementById("delete-form");
-        const collectionResource1Form =
-          document.getElementById("countries-form");
-        const collectionResource2Form = document.getElementById("updates-form");
-        const subresourceForm = document.getElementById(
-          "games-per-country-form"
-        );
-        const searchLeaguesForm = document.getElementById(
-          "search-leagues-form"
-        );
-
-        createForm.classList.add("hidden");
-        deleteForm.classList.add("hidden");
-        collectionResource1Form.classList.add("hidden");
-        collectionResource2Form.classList.add("hidden");
-        subresourceForm.classList.add("hidden");
-        searchLeaguesForm.classList.add("hidden");
-
-        if (action === "create") {
-          createForm.classList.remove("hidden");
-        } else if (action === "delete") {
-          deleteForm.classList.remove("hidden");
-        } else if (action === "read-countries") {
-          collectionResource1Form.classList.remove("hidden");
-        } else if (action === "read-updates") {
-          collectionResource2Form.classList.remove("hidden");
-        } else if (action === "read-games-per-country") {
-          subresourceForm.classList.remove("hidden");
-        } else if (action === "search-leagues") {
-          searchLeaguesForm.classList.remove("hidden");
-        }
-      }
-      document
-        .getElementById("create-form")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          const updateData = {
-            Limited_Time_Event:
-              document.getElementById("Limited_Time_Event").value,
-            Game_Id: document.getElementById("Game_Id").value,
-            Date: document.getElementById("Date").value,
-            Description: document.getElementById("Description").value,
-            Version_Number: document.getElementById("Version_Number").value,
-            Update_Size: document.getElementById("Update_Size").value,
-            New_Features: document.getElementById("New_Features").value,
-          };
-          postUpdate(updateData);
-        });
-
-      document
-        .getElementById("delete-form")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          const updateId = {
-            id: document.getElementById("Update_ID").value,
-          };
-          deleteUpdate(updateId);
-        });
-
-      document
-        .getElementById("countries-form")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-
-          const baseUri = "http://localhost/vgames-api/countries";
-          const params = [];
-
-          const languageFilter =
-            document.getElementById("language-filter").value;
-          if (languageFilter) {
-            params.push(`language=${encodeURIComponent(languageFilter)}`);
-          }
-
-          const minAge = document.getElementById("min-age").value;
-          if (minAge) {
-            params.push(`min_age=${encodeURIComponent(minAge)}`);
-          }
-
-          const maxAge = document.getElementById("max-age").value;
-          if (maxAge) {
-            params.push(`max_age=${encodeURIComponent(maxAge)}`);
-          }
-
-          const uri = `${baseUri}?${params.join("&")}`;
-          getCountries(uri);
-        });
-
-      document
-        .getElementById("updates-form")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-
-          const baseUri = "http://localhost/vgames-api/updates";
-          const params = [];
-
-          const description =
-            document.getElementById("update-description").value;
-          if (description) {
-            params.push(`description=${encodeURIComponent(description)}`);
-          }
-
-          const minSize = document.getElementById("min-update-size").value;
-          if (minSize) {
-            params.push(`min_size=${encodeURIComponent(minSize)}`);
-          }
-
-          const maxSize = document.getElementById("max-update-size").value;
-          if (maxSize) {
-            params.push(`max_size=${encodeURIComponent(maxSize)}`);
-          }
-
-          const uri = `${baseUri}?${params.join("&")}`;
-          getUpdates(uri);
-        });
-
-      document
-        .getElementById("games-per-country-form")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-
-          const baseUri = "http://localhost/vgames-api/countries";
-          const countryName = document.getElementById("country-name").value;
-          const uri = `${baseUri}/${encodeURIComponent(countryName)}/games`;
-          getGamesPerCountry(uri);
-        });
-
-      document
-        .getElementById("search-leagues-form")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          const sport = document.getElementById("sport").value;
-          const country = document.getElementById("country").value;
-          if (!sport && !country) {
-            showAlert(
-              "Please enter either a sport or a country to search leagues.",
-              "warning"
-            );
-            return;
-          }
-          const baseUri =
-            "https://www.thesportsdb.com/api/v1/json/3/search_all_leagues.php";
-          const params = [];
-
-          if (sport) {
-            params.push(`s=${encodeURIComponent(sport)}`);
-          }
-
-          if (country) {
-            params.push(`c=${encodeURIComponent(country)}`);
-          }
-
-          const uri = `${baseUri}?${params.join("&")}`;
-          getTeamsInaLeague(uri);
-        });
-
-      const showAlert = (message, type) => {
-        const alertPlaceholder = document.getElementById(
-          "liveAlertPlaceholder"
-        );
-
-        const wrapper = document.createElement("div");
-        wrapper.innerHTML = [
-          `<div class="alert alert-${type} alert-dismissible fade show" role="alert">`,
-          `   <div>${message}</div>`,
-          '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-          "</div>",
-        ].join("");
-
-        alertPlaceholder.classList.remove("d-none");
-        alertPlaceholder.append(wrapper);
-
-        setTimeout(() => {
-          wrapper.remove();
-        }, 5000);
-      };
-      document
-        .getElementById("min-age")
-        .addEventListener("input", validateMinMax);
-      document
-        .getElementById("max-age")
-        .addEventListener("input", validateMinMax);
-      document
-        .getElementById("min-update-size")
-        .addEventListener("input", validateMinMax);
-      document
-        .getElementById("max-update-size")
-        .addEventListener("input", validateMinMax);
-
-      function validateMinMax() {
-        const minAge = document.getElementById("min-age");
-        const maxAge = document.getElementById("max-age");
-
-        if (minAge && maxAge && minAge.value && maxAge.value) {
-          if (parseFloat(minAge.value) > parseFloat(maxAge.value)) {
-            minAge.setCustomValidity(
-              "Minimum age cannot be higher than maximum age."
-            );
-            maxAge.setCustomValidity(
-              "Maximum age cannot be lower than minimum age."
-            );
-          } else {
-            minAge.setCustomValidity("");
-            maxAge.setCustomValidity("");
-          }
-        }
-
-        const minSize = document.getElementById("min-update-size");
-        const maxSize = document.getElementById("max-update-size");
-
-        if (minSize && maxSize && minSize.value && maxSize.value) {
-          if (parseFloat(minSize.value) > parseFloat(maxSize.value)) {
-            minSize.setCustomValidity(
-              "Minimum size cannot be higher than maximum size."
-            );
-            maxSize.setCustomValidity(
-              "Maximum size cannot be lower than minimum size."
-            );
-          } else {
-            minSize.setCustomValidity("");
-            maxSize.setCustomValidity("");
-          }
-        }
-      }
-    </script>
+    <div class="container mt-5 d-none" id="get-results">
+      <h3>GET Results</h3>
+      <hr class="bg-primary border-bottom opacity-50" />
+      <div class="container mt-5" id="updates-container">
+        <h5 class="text-primary">Updates Table</h5>
+        <hr class="bg-primary border-bottom opacity-50" />
+        <table
+          id="updates-table"
+          class="table table-striped table-responsive table-hover"
+        >
+          <thead>
+            <tr>
+              <th>Update Id</th>
+              <th>Limited Time Event</th>
+              <th>Game Id</th>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Version Number</th>
+              <th>Update Size</th>
+              <th>New Features</th>
+            </tr>
+          </thead>
+          <tbody id="updates-body"></tbody>
+        </table>
+      </div>
+      <div class="container mt-5" id="countries-container">
+        <h5 class="text-primary">Countries Table</h5>
+        <hr class="bg-primary border-bottom opacity-50" />
+        <table
+          id="countries-table"
+          class="table table-striped table-responsive table-hover"
+        >
+          <thead>
+            <tr>
+              <th>Country Name</th>
+              <th>Most Played Game Id</th>
+              <th>Development Companies</th>
+              <th>Most Popular Genre</th>
+              <th>Average Age</th>
+              <th>Average Internet Speed</th>
+              <th>Language</th>
+            </tr>
+          </thead>
+          <tbody id="countries-body"></tbody>
+        </table>
+      </div>
+      <div class="container mt-5" id="games-container">
+        <h5 class="text-primary">Games Table</h5>
+        <hr class="bg-primary border-bottom opacity-50" />
+        <table
+          id="games-table"
+          class="table table-striped table-responsive table-hover"
+        >
+          <thead>
+            <tr>
+              <th>Game Id</th>
+              <th>Game Name</th>
+              <th>Developer Id</th>
+              <th>Genre Name</th>
+              <th>Game Founder</th>
+              <th>Release Date</th>
+              <th>Country Name</th>
+              <th>ESRB</th>
+              <th>Price</th>
+              <th>Number Of Players</th>
+            </tr>
+          </thead>
+          <tbody id="games-body"></tbody>
+        </table>
+      </div>
+      <div class="container mt-5" id="devs-container">
+        <h5 class="text-primary">Developers Table</h5>
+        <hr class="bg-primary border-bottom opacity-50" />
+        <table
+          id="dev-table"
+          class="table table-striped table-responsive table-hover"
+        >
+          <thead>
+            <tr>
+              <th>Developer Id</th>
+              <th>Developer Name</th>
+              <th>Founder</th>
+              <th>HeadQuarters</th>
+              <th>Type of Company</th>
+              <th>Parent Company</th>
+              <th>Programming Languages Used</th>
+              <th>Number of Games Produced</th>
+              <th>Foundation Date</th>
+              <th>Number of Employees</th>
+            </tr>
+          </thead>
+          <tbody id="dev-body"></tbody>
+        </table>
+      </div>
+      <div class="container mt-5" id="genres-container">
+        <h5 class="text-primary">Genres Table</h5>
+        <hr class="bg-primary border-bottom opacity-50" />
+        <table
+          id="genre-table"
+          class="table table-striped table-responsive table-hover"
+        >
+          <thead>
+            <tr>
+              <th>Genre Name</th>
+              <th>Description</th>
+              <th>Popularity Score</th>
+              <th>Target Audience</th>
+              <th>Average Rating</th>
+              <th>Average Game Length (Hrs)</th>
+            </tr>
+          </thead>
+          <tbody id="genre-body"></tbody>
+        </table>
+      </div>
+      <div class="container" id="leagues-container">
+        <h5 class="text-primary">Leagues Table</h5>
+        <hr class="bg-primary border-bottom opacity-50" />
+        <table
+          id="league-table"
+          class="table table-striped table-responsive table-hover"
+        >
+          <thead>
+            <tr>
+              <th>League Id</th>
+              <th>Date of First Event</th>
+              <th>Year Formed</th>
+              <th>Country</th>
+              <th>Sport</th>
+              <th>Gender</th>
+              <th>League</th>
+              <th>Current Season</th>
+              <th>Description</th>
+              <th>Facebook Page</th>
+              <th>Logo</th>
+            </tr>
+          </thead>
+          <tbody id="league-body"></tbody>
+        </table>
+      </div>
+      <!-- <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <li class="page-item" id="previous-page">
+            <a class="page-link" href="#">Previous</a>
+          </li>
+          <li class="page-item" id="next-page">
+            <a class="page-link" href="#">Next</a>
+          </li>
+        </ul>
+      </nav> -->
+    </div>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

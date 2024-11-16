@@ -68,7 +68,7 @@ This assignment involves creating a web-based client application that consumes a
   - **3.2.2**: `getCollection2()` - Fetch data using `fetchWrapper` and filter inputs.
   - **3.2.3**: `getSubresource()` - Fetch data using `fetchWrapper` and Resource ID input.
   - **3.2.4**: `getSportsData()` - Fetch data from TheSportsDB API using sport and country filters.
-- [ ] **3.3**: Parse and display the fetched JSON data in HTML (tables, lists, etc.).
+- [x] **3.3**: Parse and display the fetched JSON data in HTML (tables, lists, etc.).
 - [x] **3.4**: Validate all input filters to ensure correct data is being requested.
 
 ---
