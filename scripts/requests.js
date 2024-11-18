@@ -124,7 +124,7 @@ document
 
     const baseUri = "http://localhost/vgames-api/countries";
     const countryName = document.getElementById("country-name").value;
-    const uri = `${baseUri}/${encodeURIComponent(countryName)}/games`;
+    const uri = `${baseUri}/${encodeURIComponent(countryName)}/games?`;
     const getWrapper = new GetWrapper();
     getWrapper.getGamesPerCountry(uri);
   });

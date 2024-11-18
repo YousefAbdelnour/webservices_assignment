@@ -79,11 +79,11 @@ This assignment involves creating a web-based client application that consumes a
 
 ### Pagination UI
 
-- [ ] **4.1**: Add pagination controls (buttons or links) under the data display area for local resources.
+- [x] **4.1**: Add pagination controls (buttons or links) under the data display area for local resources.
 
 ### Pagination Logic
 
-- [ ] **4.2**: Implement pagination logic in each collection function:
+- [x] **4.2**: Implement pagination logic in each collection function:
   - **4.2.1**: Parse pagination metadata from the response.
   - **4.2.2**: Display items per page and handle page navigation.
   - **4.2.3**: Update the displayed content when users navigate between pages.

@@ -3,7 +3,7 @@ import { showAlert } from "../requests.js";
 import { ParseWrapper } from "./parsingWrapper.js";
 
 export class GetWrapper {
-  async getUpdates(uri) {
+  async getUpdates(uri, page = 1, pageSize = 2) {
     try {
       const options = {
         method: "GET",
@@ -13,16 +13,23 @@ export class GetWrapper {
         },
       };
       const fetchWrapper = new FetchWrapper();
-      const data = await fetchWrapper.sendRequest(uri, options);
+      const data = await fetchWrapper.sendRequest(
+        `${uri}page=${page}&page_size=${pageSize}`,
+        options
+      );
+      const updatesMeta = data.updates.meta;
+      const updatesData = data.updates.data;
       showAlert("Updates Successfully Fetched!", "success");
       const parseWrapper = new ParseWrapper();
-      parseWrapper.parseUpdates(data.updates.data);
+      parseWrapper.parseUpdates(updatesData, updatesMeta, (newPage) =>
+        this.getUpdates(uri, newPage, pageSize)
+      );
     } catch (error) {
       showAlert(error.message, "danger");
     }
   }
 
-  async getCountries(uri) {
+  async getCountries(uri, page = 1, pageSize = 2) {
     try {
       const options = {
         method: "GET",
@@ -32,16 +39,23 @@ export class GetWrapper {
         },
       };
       const fetchWrapper = new FetchWrapper();
-      const data = await fetchWrapper.sendRequest(uri, options);
+      const data = await fetchWrapper.sendRequest(
+        `${uri}page=${page}&page_size=${pageSize}`,
+        options
+      );
+      const countriesMeta = data.countries.meta;
+      const countriesData = data.countries.data;
       showAlert("Countries Successfully Fetched!", "success");
       const parseWrapper = new ParseWrapper();
-      parseWrapper.parseCountries(data.countries.data);
+      parseWrapper.parseCountries(countriesData, countriesMeta, (newPage) =>
+        this.getCountries(uri, newPage, pageSize)
+      );
     } catch (error) {
       showAlert(error.message, "danger");
     }
   }
 
-  async getGamesPerCountry(uri) {
+  async getGamesPerCountry(uri, page = 1, pageSize = 2) {
     try {
       const options = {
         method: "GET",
@@ -51,12 +65,19 @@ export class GetWrapper {
         },
       };
       const fetchWrapper = new FetchWrapper();
-      const data = await fetchWrapper.sendRequest(uri, options);
+      const data = await fetchWrapper.sendRequest(
+        `${uri}page=${page}&page_size=${pageSize}`,
+        options
+      );
       showAlert("Games Successfully Fetched!", "success");
       const parseWrapper = new ParseWrapper();
-      parseWrapper.parseCountries([data.country]);
-
-      parseWrapper.parseGames(data.country.games.data);
+      const countryData = [data.country];
+      const gamesMeta = data.country.games.meta;
+      const gamesData = data.country.games.data;
+      parseWrapper.parseCountries(countryData);
+      parseWrapper.parseGames(gamesData, gamesMeta, (newPage) =>
+        this.getGamesPerCountry(uri, newPage, pageSize)
+      );
     } catch (error) {
       showAlert(error.message, "danger");
     }
@@ -75,8 +96,6 @@ export class GetWrapper {
       const data = await fetchWrapper.sendRequest(uri, options);
       showAlert("Teams Successfully Fetched!", "success");
       const parseWrapper = new ParseWrapper();
-      console.log(data);
-      
       parseWrapper.parseLeagues(data.countries);
     } catch (error) {
       showAlert(error.message, "danger");

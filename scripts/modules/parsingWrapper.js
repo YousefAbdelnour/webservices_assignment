@@ -13,9 +13,10 @@ export class ParseWrapper {
     document.getElementById("devs-container").classList.add("d-none");
     document.getElementById("genres-container").classList.add("d-none");
     document.getElementById("leagues-container").classList.add("d-none");
+    document.getElementById("pagination-container").classList.add("d-none");
   }
 
-  parseUpdates(updates) {
+  parseUpdates(updates, meta = null, onPageChange = null) {
     const body = document.getElementById("updates-body");
     body.innerHTML = "";
 
@@ -36,8 +37,9 @@ export class ParseWrapper {
 
     document.getElementById("updates-container").classList.remove("d-none");
     document.getElementById("get-results").classList.remove("d-none");
+    if (meta && onPageChange) this.parsePagination(meta, onPageChange);
   }
-  parseCountries(countries) {
+  parseCountries(countries, meta = null, onPageChange = null) {
     const body = document.getElementById("countries-body");
     body.innerHTML = "";
 
@@ -57,8 +59,9 @@ export class ParseWrapper {
 
     document.getElementById("countries-container").classList.remove("d-none");
     document.getElementById("get-results").classList.remove("d-none");
+    if (meta && onPageChange) this.parsePagination(meta, onPageChange);
   }
-  parseGames(games) {
+  parseGames(games, meta = null, onPageChange = null) {
     const body = document.getElementById("games-body");
     body.innerHTML = "";
 
@@ -83,6 +86,7 @@ export class ParseWrapper {
 
     document.getElementById("games-table").classList.remove("d-none");
     document.getElementById("get-results").classList.remove("d-none");
+    if (meta && onPageChange) this.parsePagination(meta, onPageChange);
   }
   parseDev(dev) {
     const body = document.getElementById("dev-body");
@@ -142,5 +146,33 @@ export class ParseWrapper {
 
     document.getElementById("leagues-container").classList.remove("d-none");
     document.getElementById("get-results").classList.remove("d-none");
+  }
+
+  parsePagination(meta, onPageChange) {
+    const { page, last_page } = meta;
+    const container = document.getElementById("pagination-container");
+    container.innerHTML = "";
+
+    const pagination = document.createElement("div");
+    pagination.classList.add("pagination");
+
+    for (let i = 1; i <= last_page; i++) {
+      const pageButton = document.createElement("button");
+      pageButton.type = "button";
+      pageButton.textContent = i;
+      pageButton.classList.add("btn");
+
+      if (i === page) {
+        pageButton.classList.add("btn-outline-primary");
+      } else {
+        pageButton.classList.add("btn-outline-secondary");
+      }
+      pageButton.classList.add("page-link");
+      pageButton.addEventListener("click", () => onPageChange(i));
+      pagination.appendChild(pageButton);
+    }
+
+    container.appendChild(pagination);
+    container.classList.remove("d-none");
   }
 }
