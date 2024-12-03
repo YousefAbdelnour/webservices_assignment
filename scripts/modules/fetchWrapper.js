@@ -1,27 +1,28 @@
-// async function fetchWrapper(uri, options = {}) {
-//   try {
-//     const response = await fetch(uri, options);
-
-//     if (!response.ok) {
-//       throw new Error(
-//         "Request failed: " + response.status + " " + response.statusText
-//       );
-//     }
-
-//     if (response.headers.get("content-type")?.includes("application/json")) {
-//       const data = await response.json();
-//       return data;
-//     } else {
-//       console.log(response);
-//       throw new Error("Response is not in JSON format");
-//     }
-//   } catch (error) {
-//     console.error("Error: ", error.message);
-//     throw error;
-//   }
-// }
-
+/**
+ * Class for handling HTTP requests with customizable options.
+ */
 export class FetchWrapper {
+  /**
+   * Sends an HTTP request using the Fetch API.
+   * @param {string} uri - The URI of the resource to request.
+   * @param {Object} [options={}] - Additional request options.
+   * @param {string} [options.method="GET"] - The HTTP method to use (e.g., "GET", "POST", "DELETE").
+   * @param {Object} [options.headers] - Headers to include in the request.
+   * @param {string} [options.cache="no-cache"] - The cache mode for the request.
+   * @returns {Promise<Object>} A promise that resolves to the JSON-parsed response data.
+   * @throws {RequestFailedException} If the response status is not OK.
+   * @example
+   * const options = {
+   *   method: "GET",
+   *   headers: {
+   *     "Content-Type": "application/json",
+   *     Accept: "application/json",
+   *   },
+   * };
+   * const fetchWrapper = new FetchWrapper();
+   * const data = fetchWrapper.sendRequest("http://localhost/vgames-api/updates?page=1&page_size=10", options)
+   * console.log(data)
+   */
   async sendRequest(uri, options = {}) {
     const defaultOptions = {
       method: "GET",
@@ -52,7 +53,16 @@ export class FetchWrapper {
     }
   }
 }
+
+/**
+ * Custom error class for handling failed requests.
+ */
 export class RequestFailedException extends Error {
+  /**
+   * @param {string} message - The error message.
+   * @param {number} code - The HTTP status code of the failed request.
+   * @param {Object} details - Additional details about the error.
+   */
   constructor(message, code, details) {
     super(message);
     this.name = this.constructor.name;

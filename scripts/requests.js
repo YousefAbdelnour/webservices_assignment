@@ -2,6 +2,10 @@ import { PostWrapper } from "./modules/postWrapper.js";
 import { GetWrapper } from "./modules/getWrapper.js";
 import { DeleteWrapper } from "./modules/deleteWrapper.js";
 
+/**
+ * Toggles the visibility of forms based on the selected action.
+ * Displays the appropriate form for creating, deleting, or reading data.
+ */
 function toggleForm() {
   const action = document.getElementById("action").value;
   document.getElementById("get-results").classList.add("d-none");
@@ -35,8 +39,15 @@ function toggleForm() {
   }
 }
 
+/**
+ * Listens for changes in the "action" dropdown and triggers the toggleForm function.
+ */
 document.getElementById("action").addEventListener("change", toggleForm);
 
+/**
+ * Handles form submission for creating a new update.
+ * Sends the form data to the PostWrapper for processing.
+ */
 document.getElementById("create-form").addEventListener("submit", function (e) {
   e.preventDefault();
   const updateData = {
@@ -52,6 +63,10 @@ document.getElementById("create-form").addEventListener("submit", function (e) {
   const data = postWrapper.postUpdate(updateData);
 });
 
+/**
+ * Handles form submission for deleting an update.
+ * Sends the update ID to the DeleteWrapper for deletion.
+ */
 document.getElementById("delete-form").addEventListener("submit", function (e) {
   e.preventDefault();
   const updateId = {
@@ -61,6 +76,10 @@ document.getElementById("delete-form").addEventListener("submit", function (e) {
   deleteWrapper.deleteUpdate(updateId);
 });
 
+/**
+ * Handles form submission for fetching countries based on filter criteria.
+ * Sends the request to the GetWrapper to fetch countries based on the provided filters.
+ */
 document
   .getElementById("countries-form")
   .addEventListener("submit", function (e) {
@@ -89,6 +108,10 @@ document
     getWrapper.getCountries(uri);
   });
 
+/**
+ * Handles form submission for fetching updates based on filter criteria.
+ * Sends the request to the GetWrapper to fetch updates based on the provided filters.
+ */
 document
   .getElementById("updates-form")
   .addEventListener("submit", function (e) {
@@ -117,6 +140,10 @@ document
     getWrapper.getUpdates(uri);
   });
 
+/**
+ * Handles form submission for fetching games related to a specific country.
+ * Sends the request to the GetWrapper to fetch games for the selected country.
+ */
 document
   .getElementById("games-per-country-form")
   .addEventListener("submit", function (e) {
@@ -129,6 +156,10 @@ document
     getWrapper.getGamesPerCountry(uri);
   });
 
+/**
+ * Handles form submission for searching leagues based on sport and country.
+ * Sends the request to the GetWrapper to fetch teams in leagues based on search parameters.
+ */
 document
   .getElementById("search-leagues-form")
   .addEventListener("submit", function (e) {
@@ -159,6 +190,12 @@ document
     getWrapper.getTeamsInaLeague(uri);
   });
 
+/**
+ * Shows an alert message to the user for a given type (success, warning, etc.).
+ * The alert will be shown in the designated alert container and removed after 5 seconds.
+ * @param {string} message - The message to display in the alert.
+ * @param {string} type - The type of alert (e.g., "success", "warning").
+ */
 export function showAlert(message, type) {
   const alertPlaceholder = document.getElementById("liveAlertPlaceholder");
 
@@ -177,6 +214,10 @@ export function showAlert(message, type) {
     wrapper.remove();
   }, 5000);
 }
+
+/**
+ * Validates the minimum and maximum age and size inputs to ensure that the minimum is not greater than the maximum.
+ */
 document.getElementById("min-age").addEventListener("input", validateMinMax);
 document.getElementById("max-age").addEventListener("input", validateMinMax);
 document
@@ -186,6 +227,10 @@ document
   .getElementById("max-update-size")
   .addEventListener("input", validateMinMax);
 
+/**
+ * Validates that the minimum values for age and size are not greater than the maximum values.
+ * If invalid, custom validation messages are displayed.
+ */
 function validateMinMax() {
   const minAge = document.getElementById("min-age");
   const maxAge = document.getElementById("max-age");
